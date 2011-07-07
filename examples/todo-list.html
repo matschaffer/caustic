@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="../lib/events.js"></script>
+    <script src="../lib/caustic.js"></script>
+    <script>
+      window.onload = function(){
+        var list = View('list');
+        list.title('Tasks for Tobi');
+
+        var item = View('item');
+        item.label('Finish caustic');
+        list.items.add(item);
+
+        var item = View('item');
+        item.label('Eat food');
+        list.items.add(item);
+
+        var item = View('item');
+        item.label('Sleep');
+        list.items.add(item);
+
+        list.appendTo('body');
+      }
+    </script>
+    <style>
+      body {
+        padding: 50px;
+        font: 14px "helvetica neue", helvetica, arial, sans-serif;
+      }
+      p {
+        margin: 0;
+        padding: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/template" id="list-template">
+      <div>
+        <h2 class="title"></h2>
+        <ul class="items"></ul>
+      </div>
+    </script>
+
+    <script type="text/template" id="item-template">
+      <p>
+        <input type="checkbox" />
+        <span class="label"></span>
+      </p>
+    </script>
+  </body>
+</html>
