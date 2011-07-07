@@ -68,6 +68,10 @@ View('confirm')
   .appendTo('body');
 ```
 
+## API
+
+ ... soon!
+
 ## License 
 
 (The MIT License)
