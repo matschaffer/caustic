@@ -1,7 +1,7 @@
 
 # caustic
 
-  experimental JavaScript template-engine
+  Caustic is a highly experimental JavaScript reflection-based template engine for client-side applications.
 
 ## License 
 
