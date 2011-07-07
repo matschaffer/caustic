@@ -1,0 +1,379 @@
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script>
+      window.onload = function(){
+
+        /**
+         * EventEmitter.
+         */
+
+        function EventEmitter() {
+          this.callbacks = {};
+        }
+
+        /**
+         * Listen on the given `event` with `fn`.
+         *
+         * @param {String} event
+         * @param {Function} fn
+         */
+
+        EventEmitter.prototype.on = function(event, fn){
+          (this.callbacks[event] = this.callbacks[event] || [])
+            .push(fn);
+          return this;
+        };
+
+        /**
+         * Emit `event` with the given args.
+         *
+         * @param {String} event
+         * @param {Mixed} ...
+         */
+
+        EventEmitter.prototype.emit = function(event){
+          var args = Array.prototype.slice.call(arguments, 1)
+            , callbacks = this.callbacks[event];
+
+          if (callbacks) {
+            for (var i = 0, len = callbacks.length; i < len; ++i) {
+              callbacks[i].apply(this, args)
+            }
+          }
+
+          return this;
+        };
+
+        /**
+         * Initialize a new view with the given `name`
+         * or string of html. When a `name` is given an element
+         * with the id `name + "-template"` will be used.
+         *
+         * Examples:
+         *
+         *    var user = new View('user');
+         *    var list = new View('<ul class="list"><li></li></ul>');
+         *
+         * @param {String} name
+         * @api public
+         */
+
+        function View(name) {
+          if (!(this instanceof View)) return new View(name);
+          EventEmitter.call(this);
+          var html;
+          if (~name.indexOf('<')) html = name;
+          else html = $('#' + name + '-template').html(); 
+          this.el = $(html);
+          this.visit(this.el, true);
+        }
+
+        /**
+         * Inherit from `EventEmitter.prototype`.
+         */
+
+        View.prototype.__proto__ = EventEmitter.prototype;
+
+        /**
+         * Visit `el`.
+         *
+         * @param {jQuery} el
+         * @api private
+         */
+
+        View.prototype.visit = function(el, root){
+          var self = this
+            , type = el.get(0).nodeName
+            , classes = el.attr('class').split(/ +/)
+            , method = 'visit' + type;
+
+          if (this[method] && !root) this[method](el, classes[0]);
+
+          el.children().each(function(i, el){
+            self.visit($(el));
+          });
+        };
+
+        /**
+         * Visit A tag.
+         *
+         * @param {jQuery} el
+         * @api private
+         */
+
+        View.prototype.visitA = function(el, name){
+          var self = this;
+
+          el.click(function(e){
+            self.emit(name, e, el);
+          });
+
+          this[name] = function(fn){
+            el.click(function(e){
+              fn.call(self, e, el);
+              return false;
+            });
+            return this;
+          }
+        };
+
+        /**
+         * Visit P, TD, SPAN, or DIV tag.
+         *
+         * @param {jQuery} el
+         * @api private
+         */
+
+        View.prototype.visitP =
+        View.prototype.visitTD =
+        View.prototype.visitSPAN =
+        View.prototype.visitDIV = function(el, name){
+          var self = this;
+          this[name] = function(val){
+            if (0 == arguments.length) return el.children();
+            el.empty().append(val.el || val);
+            return this;
+          }
+        };
+
+        /**
+         * Visit UL tag.
+         *
+         * @param {jQuery} el
+         * @api private
+         */
+
+        View.prototype.visitUL = function(el, name){
+          var self = this;
+          this.children = [];
+
+          this[name] = {
+            // TODO: move these out
+
+            /**
+             * Add `val` to this list.
+             *
+             * @param {String|jQuery|View} val
+             * @return {View} for chaining
+             * @api public
+             */
+
+            add: function(val){
+              var li = $('<li>');
+              self.children.push(val);
+              el.append(li.append(val.el || val));
+              return this;
+            },
+
+            /**
+             * Return the list item `View`s as an array.
+             *
+             * @return {Array} 
+             * @api public
+             */
+
+            items: function(){
+              return self.children;
+            },
+
+            /**
+             * Return the list length.
+             *
+             * @return {Number}
+             * @api public
+             */
+
+            length: function(){
+              return this.items().length;
+            },
+
+            /**
+             * Iterate the list `View`s, calling `fn(item, i)`.
+             *
+             * @param {Function} fn
+             * @return {View} for chaining
+             * @api public
+             */
+
+            each: function(fn){
+              for (var i = 0, len = self.children.length; i < len; ++i) {
+                fn(self.children[i], i);
+              }
+              return this;
+            },
+
+            /**
+             * Map the list `View`s, calling `fn(item, i)`.
+             *
+             * @param {String|function} fn
+             * @return {Array}
+             * @api public
+             */
+
+            map: function(fn){
+              var ret = []
+                , name = fn;
+
+              if ('string' == typeof fn) {
+                fn = function(obj){ return obj[name](); };
+              };
+
+              for (var i = 0, len = self.children.length; i < len; ++i) {
+                ret.push(fn(self.children[i], i));
+              }
+
+              return ret;
+            }
+          };
+        };
+
+        /**
+         * Visit H1-H5 tags.
+         *
+         * @param {jQuery} el
+         * @api private
+         */
+
+        View.prototype.visitH1 =
+        View.prototype.visitH2 =
+        View.prototype.visitH3 =
+        View.prototype.visitH4 =
+        View.prototype.visitH5 = function(el, name){
+          var self = this;
+          this[name] = function(val){
+            if (0 == arguments.length) return el.text();
+            el.text(val.el || val);
+            return this;
+          };
+        };
+
+        /**
+         * Remove the view from the DOM.
+         *
+         * @return {View}
+         * @api public
+         */
+
+        View.prototype.remove = function(){
+          var parent = this.el.parent()
+            , type = parent.get(0).nodeName;
+          if ('LI' == type) parent.remove();
+          else this.el.remove();
+          return this;
+        };
+
+        /**
+         * Append this view's element to `val`.
+         *
+         * @param {String|jQuery} val
+         * @return {View}
+         * @api public
+         */
+
+        View.prototype.appendTo = function(val){
+          this.el.appendTo(val.el || val);
+          return this;
+        };
+
+        var tobi = View('pet')
+          , loki = View('pet')
+          , jane = View('pet');
+
+        tobi.destroy(function(){ this.remove(); });
+        loki.destroy(function(){ this.remove(); });
+        jane.destroy(function(){ this.remove(); });
+
+        var user = View('user');
+
+        tobi.name('Tobi')
+          .description('is a small beige ferret')
+          .traits
+            .add('awesome')
+            .add('programmer');
+
+        loki.name('Loki')
+          .description('is a fat brown ferret')
+          .traits
+            .add('fat')
+            .add('lazy')
+            .add('awesome');
+
+        jane.name('Jane')
+          .description('is a small brown ferret')
+          .traits
+            .add('lame')
+            .add('bitchy');
+
+        user.name('TJ')
+          .occupation('software engineer')
+          .pets
+            .add(tobi)
+            .add(loki)
+            .add(jane);
+
+        tobi.on('destroy', function(){
+          console.log('removed tobi');
+        });
+
+        console.log(user.pets.length());
+        // => 3
+
+        var names = user.pets.map(function(pet){
+          return pet.name();
+        });
+
+        console.log(names);
+        // => ['Tobi', 'Loki', 'Jane']
+
+        console.log(user.pets.map('name'));
+        // => ['Tobi', 'Loki', 'Jane']
+
+        user.appendTo('body');
+      }
+    </script>
+  </head>
+  <body>
+    <script type="text/template" id="pet-template">
+      <div class="pet">
+        <h2 class="name">Name</h2>
+        <a href="#" class="destroy">x</a>
+        <p class="description"></p>
+        <h3>Traits:</h3>
+        <ul class="traits"></ul>
+      </div>
+    </script>
+
+    <script type="text/template" id="user-template">
+      <div class="user">
+        <h2 class="name">Name</h2>
+        <table>
+          <tr>
+            <td>Occupation:</td>
+            <td class="occupation"></td>
+          </tr>
+        </table>
+        <ul class="pets"></ul>
+      </div>
+    </script>
+
+    <script type="text/template" id="dialog-template">
+      <div class="dialog">
+        <h2 class="title"></h2>
+        <a href="#" class="close">Close</a>
+        <div class="content"></div>
+      </div>
+    </script>
+
+    <script type="text/template" id="job-template">
+      <div class="job">
+        <div class="block contents">
+          <h2 class="title"></h2>
+          <a href="#" class="destroy">x</a>
+          <div class="error"></div>
+          <ul class="log"></ul>
+        </div>
+      </div>
+    </script>
+  </body>
+</html>
