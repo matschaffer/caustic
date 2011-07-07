@@ -33,7 +33,15 @@
         console.log(item.complete() == true);
         list.items.add(item);
 
+        var form = View('form');
+        form.submit(function(){
+          var item = View('item').label(form.item());
+          list.items.add(item);
+          form.item('');
+        });
+
         list.appendTo('body');
+        form.appendTo('body');
       }
     </script>
     <style>
@@ -60,6 +68,15 @@
         <input type="checkbox" name="complete" />
         <span class="label"></span>
       </p>
+    </script>
+
+    <script type="text/template" id="form-template">
+      <form action="/" method="post">
+        <p>
+          <input type="text" name="item" />
+          <input type="submit" value="Add Item" />
+        </p>
+      </form>
     </script>
   </body>
 </html>
