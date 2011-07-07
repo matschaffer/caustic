@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="../lib/events.js"></script>
+    <script src="../lib/caustic.js"></script>
+    <script>
+      window.onload = function(){
+        View('pet')
+          .name('Tobi')
+          .description('A small beige ferret.')
+          .appendTo('#pets');
+
+        View('pet')
+          .name('Jane')
+          .description('A small dark bitchy ferret.')
+          .appendTo('#pets');
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Pets</h1>
+    <ul id="pets"></ul>
+
+    <script type="text/template" id="pet-template">
+      <div class="pet">
+        <h2 class="name"></h2>
+        <p class="description"></p>
+      </div>
+    </script>
+  </body>
+</html>
