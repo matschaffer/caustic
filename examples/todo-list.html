@@ -37,7 +37,7 @@
         form.submit(function(){
           var item = View('item').label(form.item());
           list.items.add(item);
-          form.item('');
+          form.item.clear();
         });
 
         list.appendTo('body');
