@@ -1,7 +1,11 @@
 
-# caustic
+# Caustic
 
   Caustic is a highly experimental JavaScript reflection-based template engine for web applications.
+
+## About
+
+ Caustic generates a `View` simply by providing it HTML, no other intervention is required. It does this by "reflecting" on the node types, classes, and other attributes in order to build a meaningful and helpful object for interacting with it. This inference is powerful and dramatically reduces boilerplate template logic.
 
 ## License 
 
