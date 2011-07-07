@@ -74,6 +74,49 @@ View('confirm')
   .appendTo('body');
 ```
 
+### TODO List
+
+Our todo list example consists of two views, the list itself and the items, each containing a checkbox and a label.
+
+```html
+<script type="text/template" id="list-template">
+  <div>
+    <h2 class="title"></h2>
+    <ul class="items"></ul>
+  </div>
+</script>
+
+<script type="text/template" id="item-template">
+  <p>
+    <input type="checkbox" name="complete" />
+    <span class="label"></span>
+  </p>
+</script>
+```
+
+The list and items are ease to manipulate, adding addition list items by passing a string, `jQuery` object, or `View` to `list.items.add()`. Since Caustic is aware of "complete" being a `checkbox` it allows us to toggle the value with `.complete(expr)`, or get the value with `.complete()`, or finally reacting to changes by providing a callback. 
+
+```js
+var list = View('list').title('Todo Items');
+
+var item = View('item')
+  .label('Start caustic')
+  .complete(true);
+
+list.items.add(item);
+
+var item = View('item')
+  .label('Finish caustic')
+  .complete(function(checked){
+    if (checked) alert('yeah right!');
+    this.checked(false);
+  });
+
+list.items.add(item);
+
+list.appendTo('body');
+```
+
 ## API
 
  ... soon!
