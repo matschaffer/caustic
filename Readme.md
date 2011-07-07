@@ -5,7 +5,40 @@
 
 ## About
 
- Caustic generates a `View` simply by providing it HTML, no other intervention is required. It does this by "reflecting" on the node types, classes, and other attributes in order to build a meaningful and helpful object for interacting with it. This inference is powerful and dramatically reduces boilerplate template logic.
+ Caustic generates a `View` simply by providing it html, no other intervention is required. It does this by "reflecting" on the node types, classes, and other attributes in order to build a meaningful and helpful object for interacting with it. This inference is powerful and dramatically reduces boilerplate template logic.
+
+## Example
+
+ An extremely simple example would be building a list of pets. Instead of creating a template with Mustache, EJS, or similar, we simply add some html to our file as script tag, or simply pass a string of html.
+
+```html
+<script type="text/template" id="pet-template">
+  <div class="pet">
+    <h2 class="name"></h2>
+    <p class="description"></p>
+  </div>
+</script>
+```
+
+We may then want to add several pets to the following unordered list:
+
+```html
+<ul id="pets"></ul>
+```
+
+To do this, we simply invoke `View` (with or without `new`) to create our "pet" views. By passing a non-html string (does not contain "<"), Caustic will grab the html from the element with the id `name + "-template"`, so "pet-template". Caustic then provides us with many methods associated to the html provided, in this case simply some methods that allow us to set the text (or html) of the h2 and description paragraph, then appending each to the "#pets" list.
+
+```js
+View('pet')
+  .name('Tobi')
+  .description('A small beige ferret.')
+  .appendTo('#pets');
+
+View('pet')
+  .name('Jane')
+  .description('A small dark bitchy ferret.')
+  .appendTo('#pets');
+```
 
 ## License 
 
