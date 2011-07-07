@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="../lib/events.js"></script>
+    <script src="../lib/caustic.js"></script>
+    <script>
+      window.onload = function(){
+        View('confirm')
+          .title('Delete this item?')
+          .description('Click "cancel" to abort, "delete" otherwise.')
+          .close(function(){ this.remove(); })
+          .cancel(function(){ this.remove(); })
+          .ok(function(){ alert('item removed'); this.remove(); })
+          .appendTo('body');
+      }
+    </script>
+    <style>
+      body {
+        padding: 50px;
+        font: 14px "helvetica neue", helvetica, arial, sans-serif;
+      }
+      .dialog {
+        width: 400px;
+        position: relative;
+        padding: 5px 20px;
+        border: 1px solid #eee;
+        -webkit-border-radius: 10px;
+        -webkit-box-shadow: 0 1px 10px 1px #eee;
+      }
+      .dialog .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/template" id="confirm-template">
+      <div class="confirmation dialog">
+        <h2 class="title"></h2>
+        <a href="#" class="close">Close</a>
+        <p class="description"></p>
+        <p class="buttons">
+          <a href="#" class="cancel">Cancel</a>
+          <a href="#" class="ok">Delete</a>
+        </p>
+      </div>
+    </script>
+  </body>
+</html>
