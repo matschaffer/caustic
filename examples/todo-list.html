@@ -35,9 +35,13 @@
 
         var form = View('form');
         form.submit(function(){
-          var item = View('item').label(form.item());
-          list.items.add(item);
-          form.item.clear();
+          if (form.item.isEmpty()) {
+            alert('Add an item!');
+          } else {
+            var item = View('item').label(form.item());
+            list.items.add(item);
+            form.item.clear();
+          }
         });
 
         list.appendTo('body');
