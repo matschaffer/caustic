@@ -10,11 +10,21 @@
 
         var item = View('item');
         item.label('Finish caustic');
+        item.complete(function(){
+          alert('yeah right!');
+          this.complete(false);
+        });
         list.items.add(item);
+
 
         var item = View('item');
         item.label('Eat food');
         item.complete(true);
+        item.complete(function(checked){
+          alert(checked
+            ? 'Good Tobi, you dont need more food.'
+            : 'You sure you need more food Tobi?');
+        });
         list.items.add(item);
 
         var item = View('item');
