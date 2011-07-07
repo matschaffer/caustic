@@ -7,6 +7,10 @@
 
  Caustic generates a `View` simply by providing it html, no other intervention is required. It does this by "reflecting" on the node types, classes, and other attributes in order to build a meaningful and helpful object for interacting with it. This inference is powerful and dramatically reduces boilerplate template logic.
 
+## Build
+
+ `make` will build both the build targets, _./build/caustic.js_ and _./build/caustic.min.js_ for development and production use.
+
 ## Examples
 
 The examples in this section highlight some of the capabilities of Caustic, but certainly not all the features.
