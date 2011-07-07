@@ -7,7 +7,11 @@
 
  Caustic generates a `View` simply by providing it html, no other intervention is required. It does this by "reflecting" on the node types, classes, and other attributes in order to build a meaningful and helpful object for interacting with it. This inference is powerful and dramatically reduces boilerplate template logic.
 
-## Example
+## Examples
+
+The examples in this section highlight some of the capabilities of Caustic, but certainly not all the features.
+
+### Lists
 
  An extremely simple example would be building a list of pets. Instead of creating a template with Mustache, EJS, or similar, we simply add some html to our file as script tag, or simply pass a string of html.
 
@@ -39,6 +43,8 @@ View('pet')
   .description('A small dark bitchy ferret.')
   .appendTo('#pets');
 ```
+
+### Confirmation Dialog
 
 Another example of this is a confirmation dialog, with the following logic-less html:
 
