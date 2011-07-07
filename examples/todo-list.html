@@ -14,10 +14,13 @@
 
         var item = View('item');
         item.label('Eat food');
+        item.complete(true);
         list.items.add(item);
 
         var item = View('item');
         item.label('Sleep');
+        item.complete(true);
+        console.log(item.complete() == true);
         list.items.add(item);
 
         list.appendTo('body');
@@ -44,7 +47,7 @@
 
     <script type="text/template" id="item-template">
       <p>
-        <input type="checkbox" />
+        <input type="checkbox" name="complete" />
         <span class="label"></span>
       </p>
     </script>
