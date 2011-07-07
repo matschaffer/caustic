@@ -1,5 +1,11 @@
 
-test:
-	@echo "populate me"
+SRC = lib/events.js lib/caustic.js
 
-.PHONY: test
+build/caustic.js: $(SRC)
+	@mkdir -p build
+	cat $^ > $@
+
+clean:
+	rm -fr build
+
+.PHONY: clean
