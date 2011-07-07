@@ -56,7 +56,7 @@ Another example of this is a confirmation dialog, with the following logic-less 
 </script>
 ```
 
-with the tiny follow snippet we can bring our dialog to life. By doing absolutely _nothing_ but invoking `View()`. Much like before we have auto-generated `.title()` and `.description()` methods to get or set values, as well as three methods bound to clicks on their associated elements. Caustic concludes from the fact that we have an "a" tag, and that we typically bind to the click event as a common behaviour, so Caustic makes this even easier for us. Likewise we could simply invoke `.close()` or `.cancel()` to invoke the callbacks programmatically.
+With the tiny follow snippet we can bring our dialog to life. By doing absolutely _nothing_ but invoking `View()`. Much like before we have auto-generated `.title()` and `.description()` methods to get or set values, as well as three methods bound to clicks on their associated elements. Caustic concludes from the fact that we have an "a" tag, and that we typically bind to the click event as a common behaviour, so Caustic makes this even easier for us. Likewise we could simply invoke `.close()` or `.cancel()` to invoke the callbacks programmatically.
 
 ```js
 View('confirm')
