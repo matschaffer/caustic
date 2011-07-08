@@ -17,16 +17,14 @@
         var url = 'http://homepage.ntlworld.com/stureek/images/glottis03.jpg'
           , glottis = View('friend')
             .name('Glottis')
-            .avatar(url);
-
-        list.friends.add(glottis);
+            .avatar(url)
+            .addTo(list.friends);
 
         var url = 'http://homepage.ntlworld.com/stureek/images/sal01.jpg'
           , sal = View('friend')
             .name('Sal')
-            .avatar(url);
-
-        list.friends.add(sal);
+            .avatar(url)
+            .addTo(list.friends);
 
         profile
           .name('Manny Calavera')
