@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="../lib/events.js"></script>
+    <script src="../lib/caustic.js"></script>
+    <script>
+      window.onload = function(){
+        View('profile')
+          .name('Manny Calavera')
+          .avatar('http://kprojekt.net/wp-content/uploads/manny.jpg')
+          .edit(function(){
+            alert('edit profile');
+          })
+          .appendTo('body');
+      }
+    </script>
+    <style>
+      body {
+        padding: 50px;
+        font: 14px "helvetica neue", helvetica, arial, sans-serif;
+      }
+      .name {
+        font-weight: bold;
+      }
+      .name,
+      .edit {
+        display: block;
+        clear: both;
+        float: left;
+      }
+      .edit {
+        margin-top: 2px;
+        font-size: 12px;
+      }
+      .avatar {
+        float: left;
+        height: 200px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/template" id="profile-template">
+      <div class="profile">
+        <img class="avatar"></img>
+        <span class="name"></span>
+        <a href='#' class="edit">Edit My Profile</a>
+      </div>
+    </script>
+  </body>
+</html>
