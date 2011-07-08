@@ -11,6 +11,9 @@
           .edit(function(){
             alert('edit profile');
           })
+          .viewFriends(function(){
+            alert('view friends');
+          })
           .appendTo('body');
       }
     </script>
@@ -23,11 +26,13 @@
         font-weight: bold;
       }
       .name,
+      .view-friends,
       .edit {
         display: block;
         clear: both;
         float: left;
       }
+      .view-friends,
       .edit {
         margin-top: 2px;
         font-size: 12px;
@@ -45,6 +50,7 @@
         <img class="avatar"></img>
         <span class="name"></span>
         <a href='#' class="edit">Edit My Profile</a>
+        <a href='#' class="view-friends">View Friends</a>
       </div>
     </script>
   </body>
