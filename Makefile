@@ -3,6 +3,7 @@ SRC = lib/events.js lib/caustic.js
 OUT = $(SRC:.js=.out)
 
 all: build/caustic.js build/caustic.min.js
+	du build/*
 
 build/caustic.js: $(OUT)
 	@mkdir -p build
