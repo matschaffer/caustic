@@ -5,8 +5,7 @@
     <script src="../lib/caustic.js"></script>
     <script>
       window.onload = function(){
-        var edit = View('edit-profile')
-          , prompt = View('prompt')
+        var prompt = View('prompt')
           , profile = View('profile')
           , list = View('friends-list');
 
@@ -34,11 +33,6 @@
             .input.placeholder('Address to image');
         });
 
-        edit.save(function(){
-          profile.name(edit.name());
-          profile.avatar(edit.avatar());
-        });
-
         var url = 'http://homepage.ntlworld.com/stureek/images/glottis03.jpg'
           , glottis = View('friend')
             .name('Glottis')
@@ -55,9 +49,14 @@
           .name('Manny Calavera')
           .avatar('http://kprojekt.net/wp-content/uploads/manny.jpg')
           .edit(function(){
-            edit.replace('#content');
-            edit.name(profile.name.text());
-            edit.avatar(profile.avatar());
+            View('edit')
+              .name(profile.name.text())
+              .avatar(profile.avatar())
+              .save(function(){
+                profile.name(this.name());
+                profile.avatar(this.avatar());
+              })
+              .replace('#content');
           })
           .viewFriends(function(){
             list.replace('#content');
@@ -156,7 +155,7 @@
       </div>
     </script>
 
-    <script type="text/template" id="edit-profile-template">
+    <script type="text/template" id="edit-template">
       <form action="/" method="put">
         <p>
           <label>Name:</label>
