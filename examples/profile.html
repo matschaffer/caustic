@@ -14,12 +14,12 @@
           .viewFriends(function(){
             alert('view friends');
           })
-          .appendTo('body');
+          .appendTo('#sidebar');
       }
     </script>
     <style>
       body {
-        padding: 50px;
+        padding: 40px;
         font: 14px "helvetica neue", helvetica, arial, sans-serif;
       }
       .name {
@@ -42,9 +42,26 @@
         height: 200px;
         margin-bottom: 5px;
       }
+      #sidebar,
+      #content {
+        margin: 5px;
+        float: left;
+      }
+      #content {
+        border-left: 1px solid #eee;
+        width: 80%;
+        height: 100%;
+      }
     </style>
   </head>
   <body>
+
+    <div id="sidebar">
+      
+    </div>
+    <div id="content">
+    </div>
+
     <script type="text/template" id="profile-template">
       <div class="profile">
         <img class="avatar"></img>
