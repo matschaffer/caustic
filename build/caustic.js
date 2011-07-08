@@ -62,17 +62,14 @@ EventEmitter.prototype.emit = function(event){
  * MIT Licensed
  */
 
-// TODO: `make caustic.js` should wrap in an anonymous function
-// TODO: `make caustic.min.js`
-
 // TODO: compile sub-views such as User etc based on the given
 // html, as there's no need to keep traversing each time.
 
 /**
  * Convert callback `fn` to a function when a string is given.
  *
- * @param {Type} name
- * @return {Type}
+ * @param {Function} fn
+ * @return {Function}
  * @api private
  */
 
@@ -80,6 +77,38 @@ function callback(fn) {
   return 'string' == typeof fn
     ? function(obj){ return obj[fn](); }
     : fn;
+}
+
+/**
+ * Convert callback `fn` to a function when a string is given
+ * invoking the method on `obj`.
+ *
+ * @param {Function} fn
+ * @param {Object} obj
+ * @return {Function}
+ * @api private
+ */
+
+function callbackFor(fn, obj) {
+  return 'string' == typeof fn
+    ? function(){ return obj[fn](); }
+    : fn;
+}
+
+/**
+ * Camel-case the given `str`.
+ *
+ * @param {String} str
+ * @return {String}
+ * @api private
+ */
+
+function camelcase(str) {
+  return str.split(/[-\[\]]/).map(function(str, i){
+    return i && str[0]
+      ? str[0].toUpperCase() + str.slice(1)
+      : str;
+  }).join('');
 }
 
 /**
@@ -124,9 +153,10 @@ View.prototype.visit = function(el, ignore){
   var self = this
     , type = el.get(0).nodeName
     , classes = el.attr('class').split(/ +/)
-    , method = 'visit' + type;
+    , method = 'visit' + type
+    , name = camelcase(classes[0]);
 
-  if (this[method] && !ignore) this[method](el, classes[0]);
+  if (this[method] && !ignore) this[method](el, name);
 
   el.children().each(function(i, el){
     self.visit($(el));
@@ -155,10 +185,12 @@ View.prototype.visitTABLE = function(el, name){
  * @api public
  */
 
-View.prototype.visitINPUT = function(el){
+View.prototype.visitINPUT = function(el, name){
   var self = this
+    , type = el.attr('type')
     , name = el.attr('name')
-    , type = el.attr('type');
+      ? camelcase(el.attr('name'))
+      : name;
 
   switch (type) {
     case 'text':
@@ -166,7 +198,12 @@ View.prototype.visitINPUT = function(el){
         if (0 == arguments.length) return el.val();
         el.val(val);
         return this;
-      }
+      };
+
+      this[name].placeholder = function(val){
+        el.attr('placeholder', val);
+        return this;
+      };
 
       this[name].isEmpty = function(){
         return '' == el.val();
@@ -194,6 +231,8 @@ View.prototype.visitINPUT = function(el){
         return this;
       }
       break;
+    case 'submit':
+      this.visitA(el, name);
   }
 };
 
@@ -211,12 +250,27 @@ View.prototype.visitCANVAS = function(el, name){
 /**
  * Visit FORM.
  *
+ *   - adds `.submit([fn])` to listen for a submission
+ *   - adds `.name.values()` to return an array of form values
+ *   - adds `.name.values.toString()` to return a x-www-form-urlencoded string
+ *
  * @param {jQuery} el
  * @api private
  */
 
 View.prototype.visitFORM = function(el, name){
-  var self = this;
+  var self = this
+    , name = name || 'form';
+
+  this[name] = el;
+
+  this[name].values = function(){
+    return el.serializeArray();
+  };
+  this[name].values.toString = function(){
+    return el.serialize();
+  };
+
   this.submit = function(val){
     switch (typeof val) {
       case 'function':
@@ -230,7 +284,38 @@ View.prototype.visitFORM = function(el, name){
 };
 
 /**
+ * Visit IMG tag.
+ *
+ *  - adds `.name([src])` to manipulate the source 
+ *  - adds `.name(fn)` to listen for a click 
+ *
+ * @param {jQuery} el
+ * @api private
+ */
+
+View.prototype.visitIMG = function(el, name){
+  var self = this;
+
+  this[name] = function(val){
+    if (0 == arguments.length) return el.attr('src');
+    switch (typeof val) {
+      case 'function':
+        el.click(function(e){
+          val.call(self, e, el);
+        });
+        break;
+      default:
+        el.attr('src', val);
+    }
+    return this;
+  };
+};
+
+/**
  * Visit A tag.
+ *
+ *  - adds `.name([fn])` to listen or trigger the click event
+ *  - emits "name" when triggered
  *
  * @param {jQuery} el
  * @api private
@@ -244,6 +329,7 @@ View.prototype.visitA = function(el, name){
   });
 
   this[name] = function(fn){
+    fn = callbackFor(fn, this);
     el.click(function(e){
       fn.call(self, e, el);
       return false;
@@ -255,6 +341,8 @@ View.prototype.visitA = function(el, name){
 /**
  * Visit P, TD, SPAN, or DIV tag.
  *
+ *   - adds `.name([val])` to get or set the contents
+ *
  * @param {jQuery} el
  * @api private
  */
@@ -264,15 +352,26 @@ View.prototype.visitTD =
 View.prototype.visitSPAN =
 View.prototype.visitDIV = function(el, name){
   var self = this;
+
   this[name] = function(val){
     if (0 == arguments.length) return el;
     el.empty().append(val.el || val);
     return this;
-  }
+  };
+
+  this[name].text = function(val){
+    return el.text(val);
+  };
 };
 
 /**
  * Visit UL tag.
+ *
+ *  - adds `.name` to access the element
+ *  - adds `.name.add(val)` to append elements (or views)
+ *  - adds `.name.items`, an array of the elements as `View`s
+ *  - adds `.name.each(fn)` for iteration `fn(view, i)`.
+ *  - adds `.name.map(fn)` for mapping values `fn(view, i)`.
  *
  * @param {jQuery} el
  * @api private
@@ -302,15 +401,12 @@ View.prototype.visitUL = function(el, name){
   };
 
   /**
-   * Return the list item `View`s as an array.
+   * Array of items as `View` objects.
    *
-   * @return {Array} 
    * @api public
    */
 
-  el.items = function(){
-    return self.children;
-  };
+  el.items = this.children;
 
   /**
    * Iterate the list `View`s, calling `fn(item, i)`.
@@ -350,6 +446,8 @@ View.prototype.visitUL = function(el, name){
 /**
  * Visit H1-H5 tags.
  *
+ *   - adds `.name([val])` to get / set text
+ *
  * @param {jQuery} el
  * @api private
  */
@@ -383,10 +481,74 @@ View.prototype.remove = function(){
 };
 
 /**
+ * Add this view to the given `list`.
+ *
+ * @param {View} list
+ * @return {View}
+ * @api public
+ */
+
+View.prototype.addTo = function(list){
+  if (!list.add) throw new Error('.addTo() requires a list');
+  list.add(this);
+  return this;
+};
+
+/**
+ * Replace the children of `val` with this view's element.
+ *
+ * @param {String|jQuery|View} val
+ * @return {View} for chaining
+ * @api public
+ */
+
+View.prototype.replace = function(val){
+  $(val.el || val).children().replaceWith(this.el);
+  return this;
+};
+
+/**
+ * Hide the element.
+ *
+ * @return {View} for chaining
+ * @api public
+ */
+
+View.prototype.hide = function(){
+  this.el.hide();
+  return this;
+};
+
+/**
+ * Hide the element.
+ *
+ * @return {View} for chaining
+ * @api public
+ */
+
+View.prototype.show = function(){
+  this.el.show();
+  return this;
+};
+
+/**
+ * Prepend this view's element to `val`.
+ *
+ * @param {String|jQuery|View} val
+ * @return {View} for chaining
+ * @api public
+ */
+
+View.prototype.prependTo = function(val){
+  this.el.prependTo(val.el || val);
+  return this;
+};
+
+/**
  * Append this view's element to `val`.
  *
- * @param {String|jQuery} val
- * @return {View}
+ * @param {String|jQuery|View} val
+ * @return {View} for chaining
  * @api public
  */
 
