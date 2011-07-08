@@ -5,15 +5,13 @@
     <script src="../lib/caustic.js"></script>
     <script>
       window.onload = function(){
-        var profile = View('profile');
-
-        profile.name('TJ Holowaychuk');
-
-        profile.edit(function(){
-          alert('edit profile');
-        });
-
-        profile.appendTo('body');
+        View('profile')
+          .name('Manny Calavera')
+          .avatar('http://kprojekt.net/wp-content/uploads/manny.jpg')
+          .edit(function(){
+            alert('edit profile');
+          })
+          .appendTo('body');
       }
     </script>
     <style>
@@ -33,6 +31,11 @@
       .edit {
         margin-top: 2px;
         font-size: 12px;
+      }
+      .avatar {
+        float: left;
+        height: 200px;
+        margin-bottom: 5px;
       }
     </style>
   </head>
