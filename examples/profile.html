@@ -9,6 +9,10 @@
           , profile = View('profile')
           , list = View('friends-list');
 
+        profile.avatar(function(){
+          profile.avatar(prompt('Enter an avatar url:'));
+        });
+
         edit.save(function(){
           profile.name(edit.name());
           profile.avatar(edit.avatar());
