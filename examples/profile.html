@@ -14,16 +14,14 @@
         prompt.appendTo('body').hide();
 
         prompt.position = function(){
-          this.el.css({
-              top: (window.innerHeight / 2) - this.el.height() / 2
-            , left: (window.innerWidth / 2) - this.el.width() / 2
+          prompt.el.css({
+              top: (window.innerHeight / 2) - prompt.el.height() / 2
+            , left: (window.innerWidth / 2) - prompt.el.width() / 2
           });
           return this;
         };
 
-        $(window).resize(function(){
-          prompt.position();
-        });
+        $(window).resize(prompt.position);
 
         profile.avatar(function(){
           prompt.title('Avatar:')
