@@ -6,12 +6,27 @@
     <script>
       window.onload = function(){
         var edit = View('edit-profile')
-        var profile = View('profile');
+          , profile = View('profile')
+          , list = View('friends-list');
 
         edit.save(function(){
           profile.name(edit.name());
           profile.avatar(edit.avatar());
         });
+
+        var url = 'http://homepage.ntlworld.com/stureek/images/glottis03.jpg'
+          , glottis = View('friend')
+            .name('Glottis')
+            .avatar(url);
+
+        list.friends.add(glottis);
+
+        var url = 'http://homepage.ntlworld.com/stureek/images/sal01.jpg'
+          , sal = View('friend')
+            .name('Sal')
+            .avatar(url);
+
+        list.friends.add(sal);
 
         profile
           .name('Manny Calavera')
@@ -22,7 +37,7 @@
             edit.avatar(profile.avatar());
           })
           .viewFriends(function(){
-            alert('view friends');
+            list.replace('#content');
           })
           .appendTo('#sidebar');
       }
@@ -71,6 +86,15 @@
         width: 350px;
         color: #888;
       }
+      li {
+        margin: 5px;
+        float: left;
+        list-style: none;
+      }
+      h3 {
+        margin: 0;
+        font-size: 12px;
+      }
     </style>
   </head>
   <body>
@@ -81,6 +105,18 @@
     <div id="content">
       <p>I'm a page.</p>
     </div>
+
+    <script type="text/template" id="friends-list-template">
+      <ul class="friends">
+      </ul>
+    </script>
+
+    <script type="text/template" id="friend-template">
+      <div class="friend">
+        <img class="avatar" />
+        <h3 class="name"></h3>
+      </div>
+    </script>
 
     <script type="text/template" id="edit-profile-template">
       <form action="/" method="put">
