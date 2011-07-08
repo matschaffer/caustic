@@ -8,6 +8,12 @@
         var edit = View('edit-profile')
         var profile = View('profile');
 
+        edit.save(function(){
+          console.log(edit.form.serializeArray());
+          console.log(edit.form.values());
+          console.log(edit.form.values.toString());
+          console.log($('#edit form').serializeArray());
+        });
 
         profile
           .name('Manny Calavera')
@@ -86,6 +92,9 @@
         <p>
           <label>Avatar:</label>
           <input type="text" name="avatar"></input>
+        </p>
+        <p class="buttons">
+          <input type="submit" class="save" value="Save" />
         </p>
       </form>
     </script>
