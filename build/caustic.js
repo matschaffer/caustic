@@ -1,3 +1,4 @@
+-function(){
 
 /*!
  * EventEmitter
@@ -6,12 +7,18 @@
  */
 
 /**
+ * Slice reference.
+ */
+
+var slice = [].slice;
+
+/**
  * EventEmitter.
  */
 
-function EventEmitter() {
+EventEmitter = function EventEmitter() {
   this.callbacks = {};
-}
+};
 
 /**
  * Listen on the given `event` with `fn`.
@@ -34,7 +41,7 @@ EventEmitter.prototype.on = function(event, fn){
  */
 
 EventEmitter.prototype.emit = function(event){
-  var args = Array.prototype.slice.call(arguments, 1)
+  var args = slice.call(arguments, 1)
     , callbacks = this.callbacks[event];
 
   if (callbacks) {
@@ -45,6 +52,9 @@ EventEmitter.prototype.emit = function(event){
 
   return this;
 };
+
+}();
+-function(){
 
 /*!
  * caustic
@@ -86,7 +96,7 @@ function callback(fn) {
  * @api public
  */
 
-function View(name) {
+View = function View(name) {
   if (!(this instanceof View)) return new View(name);
   EventEmitter.call(this);
   var html;
@@ -94,7 +104,7 @@ function View(name) {
   else html = $('#' + name + '-template').html(); 
   this.el = $(html);
   this.visit(this.el);
-}
+};
 
 /**
  * Inherit from `EventEmitter.prototype`.
@@ -384,3 +394,5 @@ View.prototype.appendTo = function(val){
   this.el.appendTo(val.el || val);
   return this;
 };
+
+}();
