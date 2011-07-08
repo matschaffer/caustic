@@ -4,13 +4,37 @@
     <script src="../lib/events.js"></script>
     <script src="../lib/caustic.js"></script>
     <script>
+
       window.onload = function(){
         var edit = View('edit-profile')
+          , prompt = View('prompt')
           , profile = View('profile')
           , list = View('friends-list');
 
+        prompt.appendTo('body').hide();
+
+        prompt.position = function(){
+          this.el.css({
+              top: (window.innerHeight / 2) - this.el.height() / 2
+            , left: (window.innerWidth / 2) - this.el.width() / 2
+          });
+          return this;
+        };
+
+        $(window).resize(function(){
+          prompt.position();
+        });
+
         profile.avatar(function(){
-          profile.avatar(prompt('Enter an avatar url:'));
+          prompt.title('Avatar:')
+            .show()
+            .position()
+            .cancel('hide')
+            .ok(function(){
+              profile.avatar(prompt.input());
+              this.hide();
+            })
+            .input.placeholder('Address to image');
         });
 
         edit.save(function(){
@@ -77,7 +101,7 @@
       #content {
         padding: 0 10px;
         border-left: 1px solid #eee;
-        width: 80%;
+        width: 60%;
         height: 100%;
       }
       label {
@@ -96,6 +120,21 @@
       h3 {
         margin: 0;
         font-size: 12px;
+      }
+      .dialog {
+        position: fixed;
+        width: 300px;
+        padding: 5px 20px;
+        border: 1px solid #eee;
+        -webkit-border-radius: 10px;
+        -webkit-box-shadow: 0 1px 10px 1px #eee;
+        background: white;
+      }
+      .dialog .buttons {
+        text-align: right;
+      }
+      .dialog input[type=text] {
+        width: 100%;
       }
     </style>
   </head>
@@ -142,6 +181,17 @@
         <span class="name"></span>
         <a href='#' class="edit">Edit My Profile</a>
         <a href='#' class="view-friends">View Friends</a>
+      </div>
+    </script>
+
+    <script type="text/template" id="prompt-template">
+      <div class="prompt dialog">
+        <h2 class="title"></h2>
+        <p><input type="text" name="input" /></p>
+        <p class="buttons">
+          <a href="#" class="cancel">Cancel</a>
+          <a href="#" class="ok">Ok</a>
+        </p>
       </div>
     </script>
   </body>
