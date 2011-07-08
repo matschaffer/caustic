@@ -6,15 +6,17 @@
     <script>
       window.onload = function(){
         var edit = View('edit-profile')
+        var profile = View('profile');
 
 
-        View('profile')
+        profile
           .name('Manny Calavera')
           .avatar('http://kprojekt.net/wp-content/uploads/manny.jpg')
           .edit(function(){
             $('#content').empty();
             edit.appendTo('#content');
-            console.log(edit.avatar);
+            edit.name.placeholder(profile.name.text());
+            edit.avatar.placeholder(profile.avatar());
           })
           .viewFriends(function(){
             alert('view friends');
@@ -62,7 +64,7 @@
         display: block;
       }
       input[type=text] {
-        width: 150px;
+        width: 250px;
       }
     </style>
   </head>
@@ -79,11 +81,11 @@
       <form action="/" method="put">
         <p>
           <label>Name:</label>
-          <input type="text" name="user[name]" placeholder="Manny Calavera"></input>
+          <input type="text" name="name"></input>
         </p>
         <p>
           <label>Avatar:</label>
-          <input type="text" name="user[avatar]"></input>
+          <input type="text" name="avatar"></input>
         </p>
       </form>
     </script>
