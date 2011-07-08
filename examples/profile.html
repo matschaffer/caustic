@@ -9,10 +9,8 @@
         var profile = View('profile');
 
         edit.save(function(){
-          console.log(edit.form.serializeArray());
-          console.log(edit.form.values());
-          console.log(edit.form.values.toString());
-          console.log($('#edit form').serializeArray());
+          profile.name(edit.name());
+          profile.avatar(edit.avatar());
         });
 
         profile
@@ -21,8 +19,8 @@
           .edit(function(){
             $('#content').empty();
             edit.appendTo('#content');
-            edit.name.placeholder(profile.name.text());
-            edit.avatar.placeholder(profile.avatar());
+            edit.name(profile.name.text());
+            edit.avatar(profile.avatar());
           })
           .viewFriends(function(){
             alert('view friends');
@@ -70,7 +68,9 @@
         display: block;
       }
       input[type=text] {
-        width: 250px;
+        padding: 5px;
+        width: 350px;
+        color: #888;
       }
     </style>
   </head>
@@ -87,7 +87,7 @@
       <form action="/" method="put">
         <p>
           <label>Name:</label>
-          <input type="text" name="name"></input>
+          <input type="text" name="name" autocomplete="off"></input>
         </p>
         <p>
           <label>Avatar:</label>
