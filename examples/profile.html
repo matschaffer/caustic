@@ -17,8 +17,7 @@
           .name('Manny Calavera')
           .avatar('http://kprojekt.net/wp-content/uploads/manny.jpg')
           .edit(function(){
-            $('#content').empty();
-            edit.appendTo('#content');
+            edit.replace('#content');
             edit.name(profile.name.text());
             edit.avatar(profile.avatar());
           })
