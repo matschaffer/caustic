@@ -5,11 +5,15 @@
     <script src="../lib/caustic.js"></script>
     <script>
       window.onload = function(){
+        var edit = View('edit-profile')
+
+
         View('profile')
           .name('Manny Calavera')
           .avatar('http://kprojekt.net/wp-content/uploads/manny.jpg')
           .edit(function(){
-            alert('edit profile');
+            $('#content').empty();
+            edit.appendTo('#content');
           })
           .viewFriends(function(){
             alert('view friends');
@@ -48,9 +52,16 @@
         float: left;
       }
       #content {
+        padding: 0 10px;
         border-left: 1px solid #eee;
         width: 80%;
         height: 100%;
+      }
+      label {
+        display: block;
+      }
+      input[type=text] {
+        width: 150px;
       }
     </style>
   </head>
@@ -60,7 +71,21 @@
       
     </div>
     <div id="content">
+      <p>I'm a page.</p>
     </div>
+
+    <script type="text/template" id="edit-profile-template">
+      <form action="/" method="put">
+        <p>
+          <label>Name:</label>
+          <input type="text" name="user[name]" placeholder="Manny Calavera"></input>
+        </p>
+        <p>
+          <label>Avatar:</label>
+          <input type="text" name="user[avatar]"></input>
+        </p>
+      </form>
+    </script>
 
     <script type="text/template" id="profile-template">
       <div class="profile">
