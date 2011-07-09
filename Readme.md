@@ -1,4 +1,3 @@
-
 # Caustic
 
   Caustic is a highly experimental JavaScript reflection-based template engine for web applications.
@@ -403,7 +402,7 @@ todo.list
   .add('Buy groceries');
   .add('Try out Caustic');
   .add('Help out with Caustic');
-``
+```
 
 
 
