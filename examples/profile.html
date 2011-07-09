@@ -11,20 +11,10 @@
 
         prompt.appendTo('body').hide();
 
-        prompt.position = function(){
-          prompt.el.css({
-              top: (window.innerHeight / 2) - prompt.el.height() / 2
-            , left: (window.innerWidth / 2) - prompt.el.width() / 2
-          });
-          return this;
-        };
-
-        $(window).resize(prompt.position);
-
         profile.avatar(function(){
           prompt.title('Avatar:')
             .show()
-            .position()
+            .center()
             .cancel('hide')
             .ok(function(){
               profile.avatar(prompt.input());
