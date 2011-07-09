@@ -155,6 +155,19 @@ var dialog = View('dialog');
 dialog.close('hide');
 ```
 
+  "name" event is triggered when clicked, for example:
+
+```js
+var dialog = View('dialog');
+
+dialog.on('close', function(){
+  alert('I was closed!');
+});
+
+dialog.close();
+```
+
+
  ... the rest coming soon!
 
 ## License 
