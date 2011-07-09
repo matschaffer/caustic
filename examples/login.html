@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <script src="jquery.js"></script>
+    <script src="../lib/events.js"></script>
+    <script src="../lib/caustic.js"></script>
+    <script>
+      window.onload = function(){
+        var login = View('login');
+        login.appendTo('body');
+        login.submit(function(){
+          if (login.username.isEmpty() || login.password.isEmpty()) {
+            alert('username and password required!');
+          } else {
+            alert('got: ' + login.form.values);
+          }
+        });
+      }
+    </script>
+    <style>
+      body {
+        padding: 50px;
+        font: 14px "helvetica neue", helvetica, arial, sans-serif;
+      }
+      .dialog {
+        width: 400px;
+        position: relative;
+        padding: 5px 20px;
+        border: 1px solid #eee;
+        -webkit-border-radius: 10px;
+        -webkit-box-shadow: 0 1px 10px 1px #eee;
+      }
+      .dialog .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/template" id="login-template">
+      <form action="/" method="post">
+        <p>Username: <input type="text" name="username" /></p>
+        <p>Password: <input type="password" name="password" /></p>
+        <p><input type="submit" value="Login" /></p>
+      </form>
+    </script>
+  </body>
+</html>
