@@ -189,6 +189,44 @@ form.userName('tj');
 form.userName.clear();
 ```
 
+#### checkbox
+
+```html
+<script type="text/template" id="login-template">
+  <form>
+    <input type="text" name="user[name]"/>
+    <input type="password" name="user[pass]"/>
+    <input type="checkbox" name="agree" />
+  </form>
+</script>
+```
+
+  `.name(bool)`:
+
+```js
+var form = View('login');
+form.agree(true);
+```
+
+  `.name()`:
+
+```js
+var form = View('login');
+form.agree(true);
+console.log(form.agree());
+```
+
+  `.name(fn)`:
+
+```js
+var form = View('login');
+form.agree(function(checked){
+  if (checked) {
+    ...
+  }
+});
+```
+
 ### Heading tags
 
  html:
