@@ -123,7 +123,39 @@ list.appendTo('body');
 
 ## API
 
- ... soon!
+### A tags
+
+ html:
+
+```html
+<script type="text/template" id="dialog-template">
+  <div class="dialog">
+    <a href="#" class="close">Close</a>
+  </div>
+</script>
+```
+
+ `.name(fn)` handles event:
+
+```js
+var dialog = View('dialog');
+dialog.close(function(){ this.hide(); });
+```
+
+  `.name()` triggers event:
+
+```js
+var dialog = View('dialog');
+dialog.close();
+```
+  `.name(method)` handles event, invoking `method`:
+
+```js
+var dialog = View('dialog');
+dialog.close('hide');
+```
+
+ ... the rest coming soon!
 
 ## License 
 
