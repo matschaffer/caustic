@@ -342,7 +342,7 @@ login.pass('foo');
 login.submit();
 ```
 
- `.name.submit(fn)`:
+ `.submit(fn)`:
 
 ```js
 var login = View('login');
