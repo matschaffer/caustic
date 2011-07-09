@@ -137,6 +137,30 @@ list.appendTo('body');
 
   Show the view's element.
 
+### View#appendTo(val)
+
+  Append this view's element to `val`.
+
+### View#prependto(val)
+
+  Prepend this view's element to `val`.
+
+### View#replace(val)
+
+  Replace `val`'s children with this view's element.
+
+```js
+editForm.replace('body');
+```
+  
+### View#addTo(list)
+
+   Add to a list:
+
+```js
+user.addTo(friendsList);
+```
+
 ### Input tag
 
 #### text / password
@@ -353,7 +377,35 @@ login.submit(function(){
 });
 ```
 
- ... the rest coming soon!
+### UL / OL tags
+
+ html:
+
+```html
+<script type="text/template" id="todo-template">
+  <ul class="list"></ul>
+</script>
+```
+
+  `.name` to access the jQuery object:
+
+```js
+var todo = View('todo');
+todo.list.css('opacity', .5);
+```
+
+
+  `.name.add(val)` append a list element:
+
+```js
+var todo = View('todo');
+todo.list
+  .add('Buy groceries');
+  .add('Try out Caustic');
+  .add('Help out with Caustic');
+``
+
+
 
 ## License 
 
