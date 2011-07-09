@@ -298,6 +298,60 @@ dialog.on('close', function(){
 dialog.close();
 ```
 
+### Form tags
+
+ html:
+
+```html
+<script type="text/template" id="login-template">
+  <form action="/" method="post">
+    <input type="text" name="name" />
+    <input type="password" name="pass" />
+    <input type="submit" value="Login" />
+  </form>
+</script>
+```
+
+ `.name` access jQuery object, defaulting the name to `.form`:
+
+```js
+var login = View('login');
+console.log(login.form);
+```
+
+ `.name.values()` serialized array of values:
+
+```js
+var login = View('login');
+console.log(login.form.values());
+```
+
+ `.name.values.toString()` serialized x-www-form-urlencoded string of values:
+
+```js
+var login = View('login');
+console.log(login.form.values.toString());
+```
+
+ `.name.submit()`:
+
+```js
+var login = View('login');
+login.name('tj');
+login.pass('foo');
+login.submit();
+```
+
+ `.name.submit(fn)`:
+
+```js
+var login = View('login');
+login.name('tj');
+login.pass('foo');
+login.submit(function(){
+  console.log(login.values.toString());
+});
+```
 
  ... the rest coming soon!
 
